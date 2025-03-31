@@ -7,15 +7,15 @@ import inquirer = require('inquirer');
 (async () => {
   // Initiate Instagram API client
   const ig = new IgApiClient();
-  ig.state.generateDevice(process.env.IG_USERNAME);
+  ig.state.generateDevice(process.env._levi_baby);
   ig.state.proxyUrl = process.env.IG_PROXY;
 
   // Perform usual login
   // If 2FA is enabled, IgLoginTwoFactorRequiredError will be thrown
-  return Bluebird.try(() => ig.account.login(process.env.IG_USERNAME, process.env.IG_PASSWORD)).catch(
+  return Bluebird.try(() => ig.account.login(process.env._levi_baby, process.env.IG_PASSWORD)).catch(
     IgLoginTwoFactorRequiredError,
     async err => {
-      const {username, totp_two_factor_on, two_factor_identifier} = err.response.body.two_factor_info;
+      const {_levi_baby, totp_two_factor_on, two_factor_identifier} = err.response.body.two_factor_info;
       // decide which method to use
       const verificationMethod = totp_two_factor_on ? '0' : '1'; // default to 1 for SMS
       // At this point a code should have been sent
@@ -29,7 +29,7 @@ import inquirer = require('inquirer');
       ]);
       // Use the code to finish the login process
       return ig.account.twoFactorLogin({
-        username,
+        _levi_baby,
         verificationCode: code,
         twoFactorIdentifier: two_factor_identifier,
         verificationMethod, // '1' = SMS (default), '0' = TOTP (google auth for example)
